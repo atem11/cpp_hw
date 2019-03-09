@@ -37,7 +37,7 @@ struct per_set {
         base_node *tmp = root.left.get();
 
         while (tmp != nullptr) {
-            if (static_cast<node const *>(tmp)->data > v) {
+            if (v < static_cast<node const *>(tmp)->data) {
                 tmp = tmp->left.get();
             } else if (static_cast<node const *>(tmp)->data < v) {
                 tmp = tmp->right.get();
@@ -62,7 +62,7 @@ struct per_set {
 
         while (tmp != nullptr) {
             prevs.push_back(tmp);
-            if (static_cast<node const *>(tmp)->data > v) {
+            if (v < static_cast<node const *>(tmp)->data) {
                 tmp = tmp->left.get();
             } else if (static_cast<node const *>(tmp)->data < v) {
                 tmp = tmp->right.get();
@@ -77,7 +77,7 @@ struct per_set {
         for (size_t i = 0; i < prevs.size() - 1; i++) {
             T pr = static_cast<node const *>(prevs[i + 1])->data;
             T tm = static_cast<node const *>(prevs[i])->data;
-            if (pr > tm) { //left son
+            if (tm < pr) { //left son
                 new_node = new node(Ptr<base_node>(new_node), prevs[i + 1]->right, pr);
             } else {
                 new_node = new node(prevs[i + 1]->left, Ptr<base_node>(new_node), pr);
@@ -190,7 +190,7 @@ private:
         if (v < static_cast<node const *>(vert)->data) {
             return Ptr<base_node>(
                     new node(erase_impl(vert->left.get(), v), vert->right, static_cast<node const *>(vert)->data));
-        } else if (v > static_cast<node const *>(vert)->data) {
+        } else if (static_cast<node const *>(vert)->data < v) {
             return Ptr<base_node>(
                     new node(vert->left, erase_impl(vert->right.get(), v), static_cast<node const *>(vert)->data));
         } else {
@@ -306,7 +306,7 @@ typename per_set<T, Ptr>::iterator &per_set<T, Ptr>::iterator::operator++() noex
 
     while (tmp != nullptr) {
         prevs.push_back(tmp);
-        if (static_cast<node const *>(tmp)->data > x) {
+        if (x < static_cast<node const *>(tmp)->data) {
             tmp = tmp->left.get();
         } else if (static_cast<node const *>(tmp)->data < x) {
             tmp = tmp->right.get();

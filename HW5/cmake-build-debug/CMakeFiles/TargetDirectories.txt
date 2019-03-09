@@ -1,3 +1,4 @@
+C:/Users/atem1/Desktop/C++/cpp_hw/HW5/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/atem1/Desktop/C++/cpp_hw/HW5/cmake-build-debug/CMakeFiles/test.dir
 C:/Users/atem1/Desktop/C++/cpp_hw/HW5/cmake-build-debug/CMakeFiles/HW5.dir
 C:/Users/atem1/Desktop/C++/cpp_hw/HW5/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/atem1/Desktop/C++/cpp_hw/HW5/cmake-build-debug/CMakeFiles/rebuild_cache.dir
