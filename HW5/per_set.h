@@ -14,15 +14,15 @@ struct per_set {
 
     friend struct iterator;
 
-    per_set() : root(Ptr<base_node>(nullptr), Ptr<base_node>(nullptr)), _size(0) {};
+    per_set() noexcept : root(Ptr<base_node>(nullptr), Ptr<base_node>(nullptr)), _size(0) {};
 
-    per_set(per_set const &other) : root(other.root), _size(other._size) {};
+    per_set(per_set const &other) noexcept : root(other.root), _size(other._size) {};
 
     per_set(per_set &&other) noexcept : root(move(other.root)), _size(move(other._size)) {};
 
-    ~per_set() noexcept = default;
+    ~per_set() = default;
 
-    per_set &operator=(per_set const &other) {
+    per_set &operator=(per_set const &other) noexcept {
         per_set tmp(other);
         swap(tmp);
         return *this;
@@ -33,7 +33,7 @@ struct per_set {
         return *this;
     }
 
-    iterator find(T const &v) {
+    iterator find(T const &v) noexcept {
         base_node *tmp = root.left.get();
 
         while (tmp != nullptr) {
@@ -94,7 +94,7 @@ struct per_set {
         root.left = erase_impl(root.left.get(), (*it));
     }
 
-    iterator begin() const {
+    iterator begin() const noexcept {
         base_node const *tmp = &root;
         while (tmp->left.get() != nullptr) {
             tmp = tmp->left.get();
@@ -102,16 +102,16 @@ struct per_set {
         return iterator(&root, tmp);
     }
 
-    iterator end() const {
+    iterator end() const noexcept {
         return iterator(&root, &root);
     }
 
-    void swap(per_set &other) {
+    void swap(per_set &other) noexcept {
         root.left.swap(other.root.left);
         std::swap(_size, other._size);
     }
 
-    size_t size() const {
+    size_t size() const noexcept {
         return _size;
     }
 
@@ -122,26 +122,26 @@ private:
 
         friend struct per_set;
 
-        base_node(base_node const &other) :
+        base_node(base_node const &other) noexcept :
                 left(other.left), right(other.right) {};
 
         base_node(base_node &&other) noexcept :
                 left(std::move(other.left)), right(std::move(other.right)) {};
 
-        base_node(Ptr<base_node> _left, Ptr<base_node> _right) :
+        base_node(Ptr<base_node> _left, Ptr<base_node> _right) noexcept :
                 left(std::move(_left)), right(std::move(_right)) {};
 
-        base_node &operator=(base_node const &other) {
+        base_node &operator=(base_node const &other) noexcept {
             swap(other);
             return *this;
         }
 
-        void swap(base_node &other) {
+        void swap(base_node &other) noexcept {
             left.swap(other.left);
             right.swap(other.right);
         }
 
-        friend void swap(base_node &x, base_node &y);
+        friend void swap(base_node &x, base_node &y) noexcept;
 
     private:
         Ptr<base_node> left;
@@ -152,19 +152,19 @@ private:
 
         friend struct per_set;
 
-        explicit node(T _data) :
+        explicit node(T _data) noexcept :
                 base_node(Ptr<base_node>(nullptr), Ptr<base_node>(nullptr)), data(std::move(_data)) {};
 
-        node(node const &other) :
+        node(node const &other) noexcept :
                 base_node(other), data(other.data) {};
 
-        node(node &&other) noexcept(noexcept(T(std::move(other.data)))) : base_node(move(other)),
-                                                                          data(move(other.data)) {}
+        node(node &&other) noexcept : base_node(move(other)),
+                                      data(move(other.data)) {}
 
-        node(Ptr<base_node> _left, Ptr<base_node> _right, T _data) : base_node(move(_left), move(_right)),
-                                                                     data(move(_data)) {}
+        node(Ptr<base_node> _left, Ptr<base_node> _right, T _data) noexcept : base_node(move(_left), move(_right)),
+                                                                              data(move(_data)) {}
 
-        node &operator=(node const &other) {
+        node &operator=(node const &other) noexcept {
             node tmp(other);
             swap(other);
             return *this;
@@ -175,22 +175,24 @@ private:
             return *this;
         }
 
-        void swap(node &other) {
+        void swap(node &other) noexcept {
             base_node::swap(other);
             std::swap(data, other.data);
         }
 
-        friend void swap(node &x, node &y);
+        friend void swap(node &x, node &y) noexcept;
 
     private:
         T data;
     };
 
     Ptr<base_node> erase_impl(base_node *vert, T const &v) {
-        if (v < static_cast<node const*>(vert)->data) {
-            return Ptr<base_node>(new node(erase_impl(vert->left.get(), v), vert->right, static_cast<node const*>(vert)->data));
-        } else if (v > static_cast<node const*>(vert)->data) {
-            return Ptr<base_node>(new node(vert->left, erase_impl(vert->right.get(), v), static_cast<node const*>(vert)->data));
+        if (v < static_cast<node const *>(vert)->data) {
+            return Ptr<base_node>(
+                    new node(erase_impl(vert->left.get(), v), vert->right, static_cast<node const *>(vert)->data));
+        } else if (v > static_cast<node const *>(vert)->data) {
+            return Ptr<base_node>(
+                    new node(vert->left, erase_impl(vert->right.get(), v), static_cast<node const *>(vert)->data));
         } else {
             if (!vert->left && !vert->right) {
                 return Ptr<base_node>(nullptr);
@@ -201,17 +203,18 @@ private:
             if (vert->right && !vert->left) {
                 return vert->right;
             }
-            vector<base_node*> path;
-            base_node* tmp = vert->right.get();
+            vector<base_node *> path;
+            base_node *tmp = vert->right.get();
             while (tmp != nullptr) {
                 path.push_back(tmp);
                 tmp = tmp->left.get();
             }
-            auto last_val = static_cast<node const*>(path.back())->data;
+            auto last_val = static_cast<node const *>(path.back())->data;
             if (path.size() == 1) {
                 return Ptr<base_node>(new node(vert->left, path.back()->right, last_val));
             }
-            base_node* tmp_node = new node(path.back()->right, path[path.size() - 2]->right, static_cast<node const*>(path[path.size() - 2])->data);
+            base_node *tmp_node = new node(path.back()->right, path[path.size() - 2]->right,
+                                           static_cast<node const *>(path[path.size() - 2])->data);
             path.pop_back();
             path.pop_back();
             path.push_back(tmp_node);
@@ -234,12 +237,12 @@ private:
 };
 
 template<typename T, template<typename> typename Ptr>
-void swap(typename per_set<T, Ptr>::base_node &x, typename per_set<T, Ptr>::base_node &y) {
+void swap(typename per_set<T, Ptr>::base_node &x, typename per_set<T, Ptr>::base_node &y) noexcept {
     x.swap(y);
 }
 
 template<typename T, template<typename> typename Ptr>
-void swap(typename per_set<T, Ptr>::node &x, typename per_set<T, Ptr>::node &y) {
+void swap(typename per_set<T, Ptr>::node &x, typename per_set<T, Ptr>::node &y) noexcept {
     x.swap(y);
 }
 
@@ -248,42 +251,42 @@ template<typename T, template<typename> typename Ptr>
 struct per_set<T, Ptr>::iterator {
     friend struct per_set<T, Ptr>;
 
-    iterator() : root(nullptr), ptr(nullptr) {};
+    iterator() noexcept : root(nullptr), ptr(nullptr) {};
 
-    T const &operator*() const {
+    T const &operator*() const noexcept {
         return (static_cast<node const *> (ptr))->data;
     }
 
-    iterator &operator++();
+    iterator &operator++() noexcept;
 
-    iterator operator++(int) {
+    iterator operator++(int) noexcept {
         iterator tmp(*this);
         ++(*this);
         return tmp;
     }
 
-    iterator &operator--();
+    iterator &operator--() noexcept;
 
-    iterator operator--(int) {
+    iterator operator--(int) noexcept {
         iterator tmp(*this);
         --(*this);
         return tmp;
     }
 
-    bool operator==(iterator const &other) const {
+    bool operator==(iterator const &other) const noexcept {
         return (root == other.root && ptr == other.ptr);
     }
 
-    bool operator!=(iterator const &other) const {
+    bool operator!=(iterator const &other) const noexcept {
         return !(other == (*this));
     }
 
 private:
     iterator(base_node const *x, base_node const *y) : root(x), ptr(y) {};
 
-    base_node const *_left(base_node *root) const;
+    base_node const *_left(base_node *root) const noexcept;
 
-    base_node const *_right(base_node *root) const;
+    base_node const *_right(base_node *root) const noexcept;
 
     base_node const *root;
     base_node const *ptr;
@@ -291,7 +294,7 @@ private:
 };
 
 template<typename T, template<typename> typename Ptr>
-typename per_set<T, Ptr>::iterator &per_set<T, Ptr>::iterator::operator++() {
+typename per_set<T, Ptr>::iterator &per_set<T, Ptr>::iterator::operator++() noexcept {
     if (root == ptr) {
         cerr << "Has no next element";
     }
@@ -330,7 +333,7 @@ typename per_set<T, Ptr>::iterator &per_set<T, Ptr>::iterator::operator++() {
 }
 
 template<typename T, template<typename> typename Ptr>
-typename per_set<T, Ptr>::iterator &per_set<T, Ptr>::iterator::operator--() {
+typename per_set<T, Ptr>::iterator &per_set<T, Ptr>::iterator::operator--() noexcept {
     T x = static_cast<node const *>(ptr)->data;
     vector<base_node *> prevs;
     base_node *tmp = root->left.get();
@@ -364,7 +367,7 @@ typename per_set<T, Ptr>::iterator &per_set<T, Ptr>::iterator::operator--() {
 }
 
 template<typename T, template<typename> class Ptr>
-typename per_set<T, Ptr>::base_node const *per_set<T, Ptr>::iterator::_left(base_node *root) const {
+typename per_set<T, Ptr>::base_node const *per_set<T, Ptr>::iterator::_left(base_node *root) const noexcept {
     base_node *tmp = root;
     while (tmp->left.get() != nullptr) {
         tmp = tmp->left.get();
@@ -373,7 +376,7 @@ typename per_set<T, Ptr>::base_node const *per_set<T, Ptr>::iterator::_left(base
 }
 
 template<typename T, template<typename> class Ptr>
-typename per_set<T, Ptr>::base_node const *per_set<T, Ptr>::iterator::_right(base_node *root) const {
+typename per_set<T, Ptr>::base_node const *per_set<T, Ptr>::iterator::_right(base_node *root) const noexcept {
     base_node *tmp = root;
     while (tmp->right.get() != nullptr) {
         tmp = tmp->right.get();

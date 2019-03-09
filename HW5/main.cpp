@@ -17,9 +17,9 @@ int main() {
     a.insert(4);
     b = a;
     b.erase(b.find(3));
-    cerr << (a.find(3) != a.end());
+    cout << (a.find(3) != a.end()) << '\n';
 
-    const int TESTS = 200'000;
+    const int TESTS = 100'000;
     per_set<int> r;
     r.insert(5);
     r.insert(6);

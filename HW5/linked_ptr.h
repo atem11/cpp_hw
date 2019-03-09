@@ -10,10 +10,10 @@ struct linked_ptr {
 
 private:
     T *ptr;
-    linked_ptr* next;
-    linked_ptr* prev;
+    linked_ptr *next;
+    linked_ptr *prev;
 
-    void change() {
+    void change() noexcept {
         if (ptr == nullptr || (prev == nullptr && next == nullptr)) {
             return;
         }
@@ -31,20 +31,18 @@ public:
     explicit linked_ptr(T *_ptr) : ptr(_ptr), next(nullptr), prev(nullptr) {}
 
     linked_ptr(linked_ptr const &other) noexcept : ptr(other.ptr),
-                next(other.next), prev(const_cast<linked_ptr*>(&other)) {
+                                                   next(other.next), prev(const_cast<linked_ptr *>(&other)) {
         change();
     }
 
     linked_ptr(linked_ptr &&other) noexcept : ptr(other.ptr),
-                next(other.next), prev(const_cast<linked_ptr*>(&other)) {
+                                              next(other.next), prev(&other) {
         change();
     }
 
     ~linked_ptr() {
-        if (ptr != nullptr)
-        {
-            if (prev == nullptr && next == nullptr)
-            {
+        if (ptr != nullptr) {
+            if (prev == nullptr && next == nullptr) {
                 delete ptr;
             } else {
                 if (next != nullptr) {
@@ -70,7 +68,7 @@ public:
         return *this;
     }
 
-    void swap(linked_ptr &other) {
+    void swap(linked_ptr &other) noexcept {
         if (other.ptr == ptr) {
             return;
         }
@@ -83,7 +81,7 @@ public:
 
     friend void swap(linked_ptr &x, linked_ptr &y) noexcept;
 
-    T* get() const noexcept {
+    T *get() const noexcept {
         return ptr;
     }
 
@@ -95,7 +93,7 @@ public:
         return &ptr;
     }
 
-    operator bool() const noexcept {
+    explicit operator bool() const noexcept {
         return (ptr != nullptr);
     }
 };

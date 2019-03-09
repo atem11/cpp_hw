@@ -53,14 +53,14 @@ public:
         return *this;
     }
 
-    void swap(custom_shared_ptr &other) {
+    void swap(custom_shared_ptr &other) noexcept {
         std::swap(cnt, other.cnt);
         std::swap(ptr, other.ptr);
     }
 
-    friend void swap(custom_shared_ptr &x, custom_shared_ptr &y);
+    friend void swap(custom_shared_ptr &x, custom_shared_ptr &y) noexcept;
 
-    T* get() const noexcept {
+    T *get() const noexcept {
         return ptr;
     }
 
@@ -72,12 +72,12 @@ public:
         return &ptr;
     }
 
-    operator bool() const noexcept {
+    explicit operator bool() const noexcept {
         return (ptr != nullptr);
     }
 };
 
 template<typename T>
-void swap(custom_shared_ptr<T> &x, custom_shared_ptr<T> &y) {
+void swap(custom_shared_ptr<T> &x, custom_shared_ptr<T> &y) noexcept {
     x.swap(y);
 }
