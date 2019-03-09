@@ -8,7 +8,7 @@
 
 using namespace std;
 
-template<typename T, template<typename> typename Ptr = linked_ptr>
+template<typename T, template<typename> typename Ptr = custom_shared_ptr>
 struct per_set {
     struct iterator;
 

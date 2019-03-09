@@ -9,6 +9,7 @@
 #include "per_set.h"
 
 int main() {
+    const int TESTS = 100'000;
 
     per_set<int> a, b;
     a.insert(1);
@@ -16,10 +17,22 @@ int main() {
     a.insert(2);
     a.insert(4);
     b = a;
-    b.erase(b.find(3));
-    cout << (a.find(3) != a.end()) << '\n';
 
-    const int TESTS = 100'000;
+    b.erase(b.find(3));
+    b.insert(8);
+    a.erase(a.find(2));
+    a.insert(-4);
+
+    cout << "per-set a: ";
+    for (int it : a) {
+        cout << it << ' ';
+    }
+
+    cout << "\nper-set b: ";
+    for (int it : b) {
+        cout << it << ' ';
+    }
+
     per_set<int> r;
     r.insert(5);
     r.insert(6);
