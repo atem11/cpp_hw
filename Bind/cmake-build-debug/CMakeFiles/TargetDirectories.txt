@@ -1,0 +1,3 @@
+C:/Users/atem1/Desktop/C++/cpp_hw/Bind/cmake-build-debug/CMakeFiles/Bind.dir
+C:/Users/atem1/Desktop/C++/cpp_hw/Bind/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/atem1/Desktop/C++/cpp_hw/Bind/cmake-build-debug/CMakeFiles/rebuild_cache.dir
