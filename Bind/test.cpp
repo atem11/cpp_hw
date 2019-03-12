@@ -4,6 +4,11 @@
 #include <vector>
 #include <algorithm>
 
+
+//constexpr placeholder<1> _1;
+//constexpr placeholder<2> _2;
+//constexpr placeholder<3> _3;
+
 void printFunc(int a, int b, int c)
 {
     std::cout << a << b << c << std::endl;
@@ -18,7 +23,7 @@ TEST(testBind, simpleFunctions) {
     bind(&printFunc, 1, 2, 3)();
     bind(&printFunc, _1, _3, _2)(4, 6, 5);
     bind(&printFunc, _1, _1, _2)(7, 8);
-    bind(&printFunc, _1, bind(&sum, _1, 5), _2)(2, 3);
+//    bind(&printFunc, _1, bind(&sum, _1, 5), _2)(2, 3);
 }
 
 struct my_struct {
