@@ -80,23 +80,23 @@ template<typename ... Types>
 struct indexes;
 
 template<typename T>
-struct index {
+struct type_index {
     typedef integer_sequence<int> value;
 };
 
 template<int N>
-struct index<placeholder<N> > {
+struct type_index<placeholder<N> > {
     typedef integer_sequence<int, N> value;
 };
 
 template<typename F, typename ... As>
-struct index<bind_t<F, As...> > {
+struct type_index<bind_t<F, As...> > {
     typedef typename indexes<std::decay_t<As>...>::value value;
 };
 
 template<typename H, typename ... T>
 struct indexes<H, T...> {
-    typedef typename merge<typename index<H>::value, typename indexes<T...>::value>::value value;
+    typedef typename merge<typename type_index<H>::value, typename indexes<T...>::value>::value value;
 };
 
 template<>
