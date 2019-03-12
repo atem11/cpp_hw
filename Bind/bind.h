@@ -46,10 +46,6 @@ struct wrapper<placeholder<N> &> {
     typedef placeholder<N> type;
 };
 
-template<int N>
-struct wrapper<const placeholder<N> &> {
-    typedef placeholder<N> type;
-};
 
 template<int N>
 struct wrapper<placeholder<N> &&> {
@@ -61,10 +57,6 @@ struct wrapper<bind_t<F, As...> &> {
     typedef bind_t<F, As...> type;
 };
 
-template<typename F, typename ... As>
-struct wrapper<const bind_t<F, As...> &> {
-    typedef bind_t<F, As...> type;
-};
 
 template<typename F, typename ... As>
 struct wrapper<bind_t<F, As...> &&> {
@@ -187,8 +179,6 @@ struct G<placeholder<N> > {
 
 template<typename F, typename ... As>
 struct G<bind_t<F, As...> > {
-
-    G(const bind_t<F, As...> &fun1) : fun(fun1) {};
 
     G(bind_t<F, As...> &&fun1) : fun(std::move(fun1)) {}
 
