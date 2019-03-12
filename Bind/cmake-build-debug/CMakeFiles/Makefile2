@@ -64,6 +64,43 @@ CMAKE_SOURCE_DIR = C:\Users\atem1\Desktop\C++\cpp_hw\Bind
 CMAKE_BINARY_DIR = C:\Users\atem1\Desktop\C++\cpp_hw\Bind\cmake-build-debug
 
 #=============================================================================
+# Target rules for target CMakeFiles/test.dir
+
+# All Build rule for target.
+CMakeFiles/test.dir/all:
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/depend
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Users\atem1\Desktop\C++\cpp_hw\Bind\cmake-build-debug\CMakeFiles --progress-num=3,4,5,6 "Built target test"
+.PHONY : CMakeFiles/test.dir/all
+
+# Include target in all.
+all: CMakeFiles/test.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\atem1\Desktop\C++\cpp_hw\Bind\cmake-build-debug\CMakeFiles 4
+	$(MAKE) -f CMakeFiles\Makefile2 CMakeFiles/test.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\atem1\Desktop\C++\cpp_hw\Bind\cmake-build-debug\CMakeFiles 0
+.PHONY : CMakeFiles/test.dir/rule
+
+# Convenience name for target.
+test: CMakeFiles/test.dir/rule
+
+.PHONY : test
+
+# clean rule for target.
+CMakeFiles/test.dir/clean:
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/clean
+.PHONY : CMakeFiles/test.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/test.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/Bind.dir
 
 # All Build rule for target.

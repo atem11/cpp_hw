@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/atem1/Desktop/C++/cpp_hw/Bind/bind.h
+utility
+-
+tuple
+-
+type_traits
+-
+
+C:/Users/atem1/Desktop/C++/cpp_hw/Bind/main.cpp
+iostream
+-
+string
+-
+iostream
+-
+utility
+-
+tuple
+-
+bind.h
+C:/Users/atem1/Desktop/C++/cpp_hw/Bind/bind.h
+

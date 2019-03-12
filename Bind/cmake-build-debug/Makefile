@@ -55,17 +55,6 @@ CMAKE_BINARY_DIR = C:\Users\atem1\Desktop\C++\cpp_hw\Bind\cmake-build-debug
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	"C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available."
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -76,6 +65,17 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	"C:\Program Files\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E echo "No interactive CMake dialog available."
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -110,6 +110,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named test
+
+# Build rule for target.
+test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 test
+.PHONY : test
+
+# fast build rule for target.
+test/fast:
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/build
+.PHONY : test/fast
+
+#=============================================================================
 # Target rules for targets named Bind
 
 # Build rule for target.
@@ -121,6 +134,60 @@ Bind: cmake_check_build_system
 Bind/fast:
 	$(MAKE) -f CMakeFiles\Bind.dir\build.make CMakeFiles/Bind.dir/build
 .PHONY : Bind/fast
+
+gtest/gtest-all.obj: gtest/gtest-all.cc.obj
+
+.PHONY : gtest/gtest-all.obj
+
+# target to build an object file
+gtest/gtest-all.cc.obj:
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/gtest/gtest-all.cc.obj
+.PHONY : gtest/gtest-all.cc.obj
+
+gtest/gtest-all.i: gtest/gtest-all.cc.i
+
+.PHONY : gtest/gtest-all.i
+
+# target to preprocess a source file
+gtest/gtest-all.cc.i:
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/gtest/gtest-all.cc.i
+.PHONY : gtest/gtest-all.cc.i
+
+gtest/gtest-all.s: gtest/gtest-all.cc.s
+
+.PHONY : gtest/gtest-all.s
+
+# target to generate assembly for a file
+gtest/gtest-all.cc.s:
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/gtest/gtest-all.cc.s
+.PHONY : gtest/gtest-all.cc.s
+
+gtest/gtest_main.obj: gtest/gtest_main.cc.obj
+
+.PHONY : gtest/gtest_main.obj
+
+# target to build an object file
+gtest/gtest_main.cc.obj:
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/gtest/gtest_main.cc.obj
+.PHONY : gtest/gtest_main.cc.obj
+
+gtest/gtest_main.i: gtest/gtest_main.cc.i
+
+.PHONY : gtest/gtest_main.i
+
+# target to preprocess a source file
+gtest/gtest_main.cc.i:
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/gtest/gtest_main.cc.i
+.PHONY : gtest/gtest_main.cc.i
+
+gtest/gtest_main.s: gtest/gtest_main.cc.s
+
+.PHONY : gtest/gtest_main.s
+
+# target to generate assembly for a file
+gtest/gtest_main.cc.s:
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/gtest/gtest_main.cc.s
+.PHONY : gtest/gtest_main.cc.s
 
 main.obj: main.cpp.obj
 
@@ -149,18 +216,55 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles\Bind.dir\build.make CMakeFiles/Bind.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+test.obj: test.cpp.obj
+
+.PHONY : test.obj
+
+# target to build an object file
+test.cpp.obj:
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/test.cpp.obj
+.PHONY : test.cpp.obj
+
+test.i: test.cpp.i
+
+.PHONY : test.i
+
+# target to preprocess a source file
+test.cpp.i:
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/test.cpp.i
+.PHONY : test.cpp.i
+
+test.s: test.cpp.s
+
+.PHONY : test.s
+
+# target to generate assembly for a file
+test.cpp.s:
+	$(MAKE) -f CMakeFiles\test.dir\build.make CMakeFiles/test.dir/test.cpp.s
+.PHONY : test.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
 	@echo ... all (the default if no target is provided)
 	@echo ... clean
 	@echo ... depend
+	@echo ... rebuild_cache
+	@echo ... test
 	@echo ... Bind
 	@echo ... edit_cache
-	@echo ... rebuild_cache
+	@echo ... gtest/gtest-all.obj
+	@echo ... gtest/gtest-all.i
+	@echo ... gtest/gtest-all.s
+	@echo ... gtest/gtest_main.obj
+	@echo ... gtest/gtest_main.i
+	@echo ... gtest/gtest_main.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... test.obj
+	@echo ... test.i
+	@echo ... test.s
 .PHONY : help
 
 
