@@ -94,14 +94,14 @@ struct index<bind_t<F, As...> > {
     typedef typename indexes<std::decay_t<As>...>::value value;
 };
 
-template<>
-struct indexes<> {
-    typedef integer_sequence<int> value;
-};
-
 template<typename H, typename ... T>
 struct indexes<H, T...> {
     typedef typename merge<typename index<H>::value, typename indexes<T...>::value>::value value;
+};
+
+template<>
+struct indexes<> {
+    typedef integer_sequence<int> value;
 };
 
 template<typename  ... T>
