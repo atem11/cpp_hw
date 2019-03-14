@@ -15,16 +15,18 @@ int main() {
     string a = "absss";
     variant<int, double, string> t(a);
     variant<int, double, string> tt(3.22);
-    variant<monostate, long, int> testttt(100l);
+    variant<long, int> testttt(100l);
 
-    cout << get<1>(testttt) << endl;
+    cout << (t == tt) << endl;
+
+    cout << get<0>(testttt) << endl;
 
     cout << holds_alternative<long>(testttt) << endl;
     cout << holds_alternative<int>(testttt) << endl;
 
     cout << (t < tt) << endl;
 
-    visit([](auto&& a, auto&& b) { cout << a << " " << b <<  endl; }, t, tt);
+    visit([](auto&& a, auto&& b, auto c) { cout << a << " " << b << " " << c << endl; }, t, tt, testttt);
 
     auto w = visit([](auto&& arg)->variant<int, double, string> { return arg + arg; }, t);
     auto ww = visit([](auto&& arg)->variant<int, double, string> { return arg + arg; }, tt);
@@ -38,5 +40,8 @@ int main() {
     get<string>(t) = "kekek";
 
     tt = "lololo";
+
+    swap(t, tt);
+    cout << get<string>(t) << endl;
     return 0;
 }

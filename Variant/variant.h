@@ -26,26 +26,6 @@ constexpr bool operator==(monostate, monostate) noexcept { return true; }
 
 constexpr bool operator!=(monostate, monostate) noexcept { return false; }
 
-auto comparer = [](auto&& action) constexpr {
-    return ([action](auto&& a, auto&& b) constexpr -> bool  {
-        if constexpr(std::is_same_v<decltype(a), decltype(b)>){
-            return action(a, b);
-        }
-        else
-        {
-            return 0;
-        }
-    });
-};
-
-auto less = comparer([](auto&& x, auto&& y) constexpr -> bool  {return x < y; });
-auto greater = comparer([](auto&& x, auto&& y) constexpr -> bool  {return x > y; });
-auto equal = comparer([](auto&& x, auto&& y) constexpr -> bool  {return x == y; });
-auto neq = comparer([](auto&& x, auto&& y) constexpr -> bool  {return x != y; });
-auto leq = comparer([](auto&& x, auto&& y) constexpr -> bool  {return x <= y; });
-auto geq = comparer([](auto&& x, auto&& y) constexpr -> bool  {return x >= y; });
-
-
 struct bad_variant_access : public std::exception {
 
     bad_variant_access() noexcept : exception(), reason("la-la-la") {};
@@ -860,6 +840,118 @@ constexpr bool holds_alternative(const variant<Us...>& v) noexcept {
     }
 }
 
+
+auto comparer = [](auto&& action) constexpr {
+    return ([action](auto&& a, auto&& b) constexpr -> bool  {
+        if constexpr(std::is_same_v<decltype(a), decltype(b)>){
+            return action(a, b);
+        } else {
+            return 0;
+        }
+    });
+};
+
+auto less = comparer([](auto&& x, auto&& y) constexpr -> bool  {return x < y; });
+auto greater = comparer([](auto&& x, auto&& y) constexpr -> bool  {return x > y; });
+auto equal = comparer([](auto&& x, auto&& y) constexpr -> bool  {return x == y; });
+auto neq = comparer([](auto&& x, auto&& y) constexpr -> bool  {return x != y; });
+auto leq = comparer([](auto&& x, auto&& y) constexpr -> bool  {return x <= y; });
+auto geq = comparer([](auto&& x, auto&& y) constexpr -> bool  {return x >= y; });
+
+
+template <typename ... Ts>
+constexpr bool operator==(const variant<Ts...>& v, const variant<Ts...>& w) {
+    if (v.index() != w.index()) {
+        return false;
+    }
+    if (v.valueless_by_exception()) {
+        return true;
+    }
+    return visit(equal, v, w);
+}
+
+template <typename ... Ts>
+constexpr bool operator!=(const variant<Ts...>& v, const variant<Ts...>& w) {
+    if (v.index() != w.index()) {
+        return true;
+    }
+    if (v.valueless_by_exception()) {
+        return false;
+    }
+    return visit(neq, v, w);
+}
+
+template <typename ... Ts>
+constexpr bool operator<(const variant<Ts...>& v, const variant<Ts...>& w) {
+    if (w.valueless_by_exception()) {
+        return false;
+    }
+    if (v.valueless_by_exception()) {
+        return true;
+    }
+    if (v.index() == w.index()) {
+        return visit(less, v, w);
+    }
+    else {
+        return v.index() < w.index();
+
+    }
+}
+
+
+template <typename ... Ts>
+constexpr bool operator>(const variant<Ts...>& v, const variant<Ts...>& w) {
+    if (v.valueless_by_exception()) {
+        return false;
+    }
+    if (w.valueless_by_exception()) {
+        return true;
+    }
+    if (v.index() == w.index()) {
+        return visit(greater, v, w);;
+    }
+    else {
+        return v.index() > w.index();
+
+    }
+}
+
+template <typename ... Ts>
+constexpr bool operator<=(const variant<Ts...>& v, const variant<Ts...>& w) {
+    if (v.valueless_by_exception()) {
+        return true;
+    }
+    if (w.valueless_by_exception()) {
+        return false;
+    }
+    if (v.index() == w.index()) {
+        return  visit(leq, v, w);
+    }
+    else {
+        return v.index() < w.index();
+
+    }
+}
+
+template <typename ... Ts>
+constexpr bool operator>=(const variant<Ts...>& v, const variant<Ts...>& w) {
+    if (w.valueless_by_exception()) {
+        return true;
+    }
+    if (v.valueless_by_exception()) {
+        return false;
+    }
+    if (v.index() == w.index()) {
+        return visit(geq, v, w);
+    }
+    else {
+        return v.index() < w.index();
+
+    }
+}
+
+
+
 template<typename T, size_t ... dimens>
 struct multi_array {
     constexpr const T& access() const {
@@ -871,6 +963,7 @@ struct multi_array {
 
 template<typename T, size_t first_dim, size_t ... rest_dims>
 struct multi_array<T, first_dim, rest_dims...> {
+
     template<typename ... size_ts>
     constexpr const T& access(size_t first_ind, size_ts ... other_inds) const {
         return data_arr[first_ind].access(other_inds...);
@@ -955,94 +1048,4 @@ constexpr decltype(auto) visit(Visitor&& vis, Variants&& ... vars) {
     auto func_ptr = v_table.access(vars.index()...);
 
     return (*func_ptr)(std::forward<Visitor>(vis), std::forward<Variants>(vars)...);
-}
-
-template <typename ... Ts>
-constexpr bool operator==(const variant<Ts...>& v, const variant<Ts...>& w) {
-    if (v.index() != w.index()) {
-        return false;
-    }
-    if (v.valueless_by_exception()) {
-        return true;
-    }
-    return visit(equal, v, w);
-}
-
-template <typename ... Ts>
-constexpr bool operator!=(const variant<Ts...>& v, const variant<Ts...>& w) {
-    if (v.index() != w.index()) {
-        return true;
-    }
-    if (v.valueless_by_exception()) {
-        return false;
-    }
-    return visit(neq, v, w);
-}
-
-template <typename ... Ts>
-constexpr bool operator<(const variant<Ts...>& v, const variant<Ts...>& w) {
-    if (w.valueless_by_exception()) {
-        return false;
-    }
-    if (v.valueless_by_exception()) {
-        return true;
-    }
-    if (v.index() == w.index()) {
-        return visit(less, v, w);
-    }
-    else {
-        return v.index() < w.index();
-
-    }
-}
-
-template <typename ... Ts>
-constexpr bool operator>(const variant<Ts...>& v, const variant<Ts...>& w) {
-    if (v.valueless_by_exception()) {
-        return false;
-    }
-    if (w.valueless_by_exception()) {
-        return true;
-    }
-    if (v.index() == w.index()) {
-        return visit(greater, v, w);;
-    }
-    else {
-        return v.index() > w.index();
-
-    }
-}
-
-template <typename ... Ts>
-constexpr bool operator<=(const variant<Ts...>& v, const variant<Ts...>& w) {
-    if (v.valueless_by_exception()) {
-        return true;
-    }
-    if (w.valueless_by_exception()) {
-        return false;
-    }
-    if (v.index() == w.index()) {
-        return  visit(leq, v, w);
-    }
-    else {
-        return v.index() < w.index();
-
-    }
-}
-
-template <typename ... Ts>
-constexpr bool operator>=(const variant<Ts...>& v, const variant<Ts...>& w) {
-    if (w.valueless_by_exception()) {
-        return true;
-    }
-    if (v.valueless_by_exception()) {
-        return false;
-    }
-    if (v.index() == w.index()) {
-        return visit(geq, v, w);
-    }
-    else {
-        return v.index() < w.index();
-
-    }
 }
