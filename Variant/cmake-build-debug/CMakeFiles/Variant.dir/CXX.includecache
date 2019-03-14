@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/artem/Projects/C++/cpp_hw/Variant/main.cpp
+iostream
+-
+vector
+-
+string
+-
+variant.h
+/home/artem/Projects/C++/cpp_hw/Variant/variant.h
+
+/home/artem/Projects/C++/cpp_hw/Variant/variant.h
+utility
+-
+algorithm
+-
+cstdio
+-
+memory
+-
+exception
+-
+type_traits
+-
+limits
+-
+algorithm
+-
+

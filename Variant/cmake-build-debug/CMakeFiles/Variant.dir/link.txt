@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -std=c++11 -pedantic -g -fsanitize=address,undefined -D_GLIBCXX_DEBUG   CMakeFiles/Variant.dir/main.cpp.o  -o Variant 

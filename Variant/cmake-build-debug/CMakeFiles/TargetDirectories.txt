@@ -1,0 +1,3 @@
+/home/artem/Projects/C++/cpp_hw/Variant/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/artem/Projects/C++/cpp_hw/Variant/cmake-build-debug/CMakeFiles/Variant.dir
+/home/artem/Projects/C++/cpp_hw/Variant/cmake-build-debug/CMakeFiles/edit_cache.dir
